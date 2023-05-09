@@ -1,0 +1,304 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("<-------第一题------->");
+        Monkey m1  = new Monkey("猴子一号");
+        System.out.println("这个猴子是："+m1.getName());
+        m1.speak();
+
+        People p1 = new People("人类一号");
+        System.out.println("这个人类是："+p1.getName());
+        p1.speak();
+        p1.think();
+
+        System.out.println("<-------第二题------->");
+
+        Car c1 = new Car(2);
+        c1.setWeight(1000);
+        c1.setWheels(4);
+        c1.show();
+        c1.display01();
+        c1.checkloader();
+
+        Truck t1 = new Truck(2,4000);
+        t1.setWeight(12000);
+        t1.setWheels(12);
+        t1.show();
+        t1.display01();
+        t1.checkloader();
+        t1.display02();
+        t1.checkpayload();
+
+
+        System.out.println("----------------------------------");
+
+        Car c2  = new Car(4);
+        c2.setWeight(9999);
+        c2.setWheels(21);
+        c2.show();
+        c2.display01();
+        c2.checkloader();
+
+        Truck t2  = new Truck(4,5343);
+        t2.setWeight(999999);
+        t2.setWheels(16);
+        t2.show();
+        t2.display01();
+        t2.checkloader();
+        t2.display02();
+        t2.checkpayload();
+
+        System.out.println("<-------第三题------->");
+        System.out.println("请输入两个数字");
+        String a = sc.next();
+        String b = sc.next();
+        System.out.println("a=" + a + "," + "b=" + b);
+        String c = getSum(a,b);
+        System.out.println("c=" + c);
+
+
+        System.out.println("<-------第四题------->");
+        System.out.println("请输入m 和 n");
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        int mn = uniquePaths(m,n);
+        System.out.println("总共有："+ mn);
+
+        System.out.println("<-------第五题------->");
+        System.out.println("请输入数组元素，以逗号隔开");
+        String s = sc.next();
+        String[] str = s.split(",");
+        String str1 = longestCommonPrefix(str);
+        System.out.println("解释： " + str1);
+
+
+
+    }
+    public static String getSum(String a,String b){
+        List<Integer> la = new ArrayList<Integer>();
+        List<Integer> lb = new ArrayList<Integer>();
+        String c = "";
+        for(int i = a.length()-1;i >= 0;--i){
+            la.add(a.charAt(i)-'0');
+        }
+        for(int i = b.length()-1;i >= 0;--i){
+            lb.add(b.charAt(i)-'0');
+        }
+
+        List<Integer> lc = plus(la,lb);
+        Iterator<Integer> it = lc.iterator();
+        StringBuilder sb  = new StringBuilder();
+        for(int i = 0; i < lc.size() ; i++){
+            sb.append(it.next());
+        }
+        sb.reverse();
+        c = sb.toString();
+        return c;
+    }
+    public static List<Integer> plus(List<Integer> la, List<Integer> lb){
+        List<Integer> lc = new ArrayList<Integer>();
+        int t = 0;
+
+        for(int i  = 0; i < la.size() || i < lb.size(); i ++) {
+            if(i < la.size()) t += la.get(i);
+            if(i < lb.size()) t += lb.get(i);
+
+            lc.add( t % 10);
+            t = t / 10;
+        }
+
+        return lc;
+    }
+    public static int uniquePaths(int m,int n){
+        int[][] arr = new int[m][n];
+        arr[0][0] = 1;
+        for(int right = 0; right < m; right ++){
+            for(int down = 0 ; down < n; down ++){
+                if(right == 0 || down == 0 ) arr[right][down] = 1;
+                else {
+                    arr[right][down] = arr[right-1][down] + arr[right][down-1];
+                }
+            }
+        }
+        return arr[m-1][n-1];
+    }
+    public static String longestCommonPrefix(String[] strs) {
+            if (strs==null|| strs.length==0)return "";
+            Arrays.sort(strs);
+            StringBuilder sb  = new StringBuilder();
+            int k =Math.min(strs[0].length(), strs[strs.length - 1].length());
+            for (int i = 0; i < k; i++) {
+                if (strs[0].charAt(i) == strs[strs.length - 1].charAt(i)) {
+                    sb.append(strs[0].charAt(i));
+                }else {
+                    break;
+                }
+            }
+            return sb.toString();
+    }
+
+
+}
+
+
+class Monkey{
+        private String name;
+
+    public Monkey() {}
+
+    public Monkey(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void speak(){
+        System.out.println("咿咿呀呀......");
+    }
+}
+class People extends Monkey{
+    public People() {
+    }
+
+    public People(String name) {
+        super(name);
+    }
+    @Override
+    public void speak() {
+        System.out.println("小样儿，不错嘛！会说话了！");
+    }
+    public void think(){
+        System.out.println(" 别说话！认真思考！");
+    }
+}
+class Vehicle{
+    private int wheels;
+    private int weight;
+
+    public Vehicle() {}
+
+    public Vehicle(int wheels, int weight) {
+        this.wheels = wheels;
+        this.weight = weight;
+    }
+
+    public int getWheels() {
+        return wheels;
+    }
+
+    public void setWheels(int wheels) {
+        this.wheels = wheels;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+    public void show(){
+        System.out.println("车轮的个数是："+wheels+"  "+"车重："+weight);
+    }
+}
+class Car extends Vehicle{
+    private int loader;
+
+    public Car(int loader) {
+        this.loader = loader;
+    }
+
+    public Car(int wheels, int weight, int loader) {
+        super(wheels, weight);
+        this.loader = loader;
+    }
+
+    public void setLoader(int loader) {
+        this.loader = loader;
+    }
+
+    public int getLoader() {
+        return loader;
+    }
+    public void display01(){
+        System.out.println("这是一个小车，能载5人，实载"+loader+"人");
+    }
+    public void checkloader(){
+        if(loader > 5){
+            System.out.println("小车的人数超载了");
+        }
+        else if ( loader < 0){
+            System.out.println("小车人数不合理");
+        }else{
+            System.out.println("");
+        }
+    }
+
+
+}
+class Truck extends Vehicle{
+    private int loader;
+    private int payload;
+
+    public Truck(int loader, int payload) {
+        this.loader = loader;
+        this.payload = payload;
+    }
+
+    public Truck(int wheels, int weight, int loader, int payload) {
+        super(wheels, weight);
+        this.loader = loader;
+        this.payload = payload;
+    }
+
+
+    public int getLoader() {
+        return loader;
+    }
+
+    public void setLoader(int loader) {
+        this.loader = loader;
+    }
+
+    public int getPayload() {
+        return payload;
+    }
+
+    public void setPayload(int payload) {
+        this.payload = payload;
+    }
+    public void display01(){
+        System.out.print("这是一个卡车，能载3人，实载"+loader+"人 ");
+    }
+    public void checkloader(){
+        if(loader > 3){
+            System.out.print("卡车的人数超载了");
+        }
+        else if ( loader < 0){
+            System.out.print("卡车人数不合理");
+        }else{
+            System.out.print("");
+        }
+        System.out.println("");
+    }
+   public void display02(){
+       System.out.println("这是一个卡车，核载5000kg，实载"+payload+"kg ");
+   }
+    public void checkpayload(){
+        if(payload > 5000){
+            System.out.println("超载捏");
+        } else if(payload < 0){
+            System.out.println("不合理");
+        }else {
+            System.out.print("");
+        }
+    }
+
+}
